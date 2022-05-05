@@ -30,7 +30,8 @@ CREATE TABLE order_products
     total_price     BIGINT          NOT NULL,
     created_at      TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     updated_at      TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    INDEX (order_id),
     CONSTRAINT fk_order_product_to_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     CONSTRAINT fk_order_product_to_product FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+CREATE INDEX idx_order_products_order_id ON order_products(order_id);
