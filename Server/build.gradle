@@ -18,6 +18,7 @@ dependencies {
 
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.assertj:assertj-core:3.22.0'
     testImplementation 'com.wix:wix-embedded-mysql:4.6.2'
     testImplementation 'com.h2database:h2:2.1.212'
 }
