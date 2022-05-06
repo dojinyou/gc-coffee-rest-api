@@ -1,5 +1,6 @@
 package com.dojinyou.devcourse.gccoffeerestapi.product;
 
+import com.dojinyou.devcourse.gccoffeerestapi.common.exception.NotFoundException;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Category;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Product;
 import org.junit.jupiter.api.DisplayName;
@@ -89,52 +90,30 @@ class ProductDefaultServiceTest {
     }
 
     @Test
-    @DisplayName("findById함수는 repository의 findById 함수를 호출한다.")
-    void findById함수는_repository의_findById_함수를_호출한다() {
-        long sampleId = 1;
-        productService.findById(sampleId);
-
-        verify(productRepository, atLeastOnce()).findById(sampleId);
-    }
-
-    @Test
     @DisplayName("findById함수는 입력된 id값에 해당하는 데이터가 있으면 데이터를 리턴한다")
     void findById함수는_입력된_id값에_해당하는_데이터가_있으면_데이터를_리턴한다() {
-        long existId = insertedProduct.id();
+        long existId = insertedProduct.getId();
         when(productRepository.findById(existId)).thenReturn(Optional.of(insertedProduct));
 
 
-        Optional<Product> foundOptionalProduct = productService.findById(existId);
+        Product foundProduct = productService.findById(existId);
 
-        assertThat(foundOptionalProduct).isNotNull();
-        assertThat(foundOptionalProduct.isPresent()).isTrue();
-
-        Product foundProduct = foundOptionalProduct.get();
-
+        verify(productRepository, atLeastOnce()).findById(existId);
         assertThat(foundProduct).isNotNull()
-                                .isEqualTo(foundProduct);
+                                .isEqualTo(insertedProduct);
     }
 
     @Test
-    @DisplayName("findById함수는 입력된 id값에 해당하는 데이터가 없으면 Optional.Empty를 리턴한다")
-    void findById함수는_입력된_id값에_해당하는_데이터가_없으면_Optional_Empty를_리턴한다() {
+    @DisplayName("findById함수는 입력된 id값에 해당하는 데이터가 없으면 NotFoundException을 발생시킨다")
+    void findById함수는_입력된_id값에_해당하는_데이터가_없으면_NotFoundException을_발생시킨다() {
         long notExistId = 10;
         when(productRepository.findById(notExistId)).thenReturn(Optional.empty());
 
 
-        Optional<Product> foundOptionalProduct = productService.findById(notExistId);
+       Throwable throwable = catchThrowable(() -> productService.findById(notExistId));
 
-        assertThat(foundOptionalProduct).isNotNull();
-        assertThat(foundOptionalProduct.isEmpty()).isTrue();
-    }
-
-    @Test
-    @DisplayName("findByName함수는 repository의 findByName 함수를 호출한다.")
-    void findByName함수는_repository의_findByName_함수를_호출한다() {
-        String sampleName = "testName";
-        productService.findByName(sampleName);
-
-        verify(productRepository, atLeastOnce()).findByName(sampleName);
+        assertThat(throwable).isNotNull()
+                             .isInstanceOf(NotFoundException.class);
     }
 
     @ParameterizedTest
@@ -154,28 +133,24 @@ class ProductDefaultServiceTest {
         when(productRepository.findByName(existName)).thenReturn(Optional.of(insertedProduct));
 
 
-        Optional<Product> foundOptionalProduct = productService.findByName(existName);
-
-        assertThat(foundOptionalProduct).isNotNull();
-        assertThat(foundOptionalProduct.isPresent()).isTrue();
-
-        Product foundProduct = foundOptionalProduct.get();
+        verify(productRepository, atLeastOnce()).findByName(existName);
+        Product foundProduct = productService.findByName(existName);
 
         assertThat(foundProduct).isNotNull()
-                                .isEqualTo(foundProduct);
+                                .isEqualTo(insertedProduct);
     }
 
     @Test
-    @DisplayName("findByName함수는 입력된 id값에 해당하는 데이터가 없으면 Optional.Empty를 리턴한다")
-    void findByName함수는_입력된_id값에_해당하는_데이터가_없으면_Optional_Empty를_리턴한다() {
+    @DisplayName("findByName함수는 입력된 id값에 해당하는 데이터가 없으면 NotFoundException을 발생시킨다.")
+    void findByName함수는_입력된_id값에_해당하는_데이터가_없으면_NotFoundException을_발생시킨다() {
         String notExistName = "notExistName";
         when(productRepository.findByName(notExistName)).thenReturn(Optional.empty());
 
 
-        Optional<Product> foundOptionalProduct = productService.findByName(notExistName);
+        Throwable throwable = catchThrowable(() -> productService.findByName(notExistName));
 
-        assertThat(foundOptionalProduct).isNotNull();
-        assertThat(foundOptionalProduct.isEmpty()).isTrue();
+        assertThat(throwable).isNotNull()
+                             .isInstanceOf(NotFoundException.class);
     }
 
     @ParameterizedTest
