@@ -33,7 +33,7 @@ public class ProductJdbcRepository implements ProductRepository {
         final var updatedAt = toLocalDateTime(resultSet.getTimestamp("updated_at"));
         final var isDeleted = resultSet.getBoolean("is_deleted");
 
-        return new Product(id, name, category, price, description, createdAt, updatedAt, isDeleted);
+        return Product.of(id, name, category, price, description, createdAt, updatedAt, isDeleted);
     };
 
     @Override

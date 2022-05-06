@@ -13,7 +13,7 @@ public final class Product {
     private final LocalDateTime updatedAt;
     private final boolean isDeleted;
 
-    public Product(long id,
+    private Product(long id,
                    String name,
                    Category category,
                    long price,
@@ -31,9 +31,34 @@ public final class Product {
         this.isDeleted = isDeleted;
     }
 
-    public Product(String name, Category category, long price, String description) {
+    private Product(String name, Category category, long price, String description) {
         this(0, name, category, price, description, null, null, false);
     }
+
+    public static Product of(String name, Category category, long price, String description) {
+        valid(0, name, category, price);
+        return new Product(name, category, price, description);
+
+    }
+
+    public static Product of(long id,
+                             String name,
+                             Category category,
+                             long price,
+                             String description,
+                             LocalDateTime createdAt,
+                             LocalDateTime updatedAt,
+                             boolean isDeleted) {
+        valid(id, name, category, price);
+        return new Product(id, name, category, price, description, createdAt, updatedAt, isDeleted);
+    }
+
+    private static void valid(long id, String name, Category category, long price) {
+        if (id < 0 || name == null || category == null || price < 0) {
+            throw new IllegalArgumentException("상품 생성에 잘못된 입력값이 존재합니다.");
+        }
+    }
+
 
     public long id() {
         return id;

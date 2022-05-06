@@ -56,7 +56,7 @@ class ProductJdbcRepositoryTest {
         embeddedMysql.stop();
     }
 
-    Product inputProduct = new Product("testName", Category.COFFEE, 100L, null);
+    Product inputProduct = Product.of("testName", Category.COFFEE, 100L, null);
 
     @Test
     @Order(2)
@@ -176,7 +176,7 @@ class ProductJdbcRepositoryTest {
 
     @Test
     @Order(3)
-    //@DisplayCategory("findAllByCategory함수는 입력된 Category에 해당하는 데이터가 있으면 데이터를 리턴한다.")
+    @DisplayName("findAllByCategory함수는 입력된 Category에 해당하는 데이터가 있으면 데이터를 리턴한다.")
     void findAllByCategory함수는_입력된_Category에_해당하는_데이터가_있으면_데이터를_리턴한다() {
         Category inputCategory = inputProduct.category();
 
@@ -194,7 +194,7 @@ class ProductJdbcRepositoryTest {
     @Test
     @DisplayName("update함수는 입력된 상품의 id에 해당하는 제품이 없을 경우 예외를 발생시킨다.")
     void update함수는_입력된_상품의_id에_해당하는_제s품이_없을_경우_예외를_발생시킨다() {
-        Product notFoundProduct = new Product(0L, "notDuplicatedName",
+        Product notFoundProduct = Product.of(0L, "notDuplicatedName",
                                               Category.COFFEE, 100L, null,
                                               LocalDateTime.now(), LocalDateTime.now(),
                                               false);
@@ -209,9 +209,9 @@ class ProductJdbcRepositoryTest {
     @Order(3)
     @DisplayName("update함수는 update하려는 이름이 중복일 경우 예외를 발생시킨다.")
     void update함수는_update하려는_이름이_중복일_경우_예외를_발생시킨다() {
-        Product insertProduct = new Product("notDuplicatedName", Category.TEA, 100L, null);
+        Product insertProduct = Product.of("notDuplicatedName", Category.TEA, 100L, null);
         productJdbcRepository.insert(insertProduct);
-        Product updateProduct = new Product(2L, "testName", insertProduct.category(),
+        Product updateProduct = Product.of(2L, "testName", insertProduct.category(),
                                             insertProduct.price(), insertProduct.description(),
                                             null, null,false);
 
@@ -225,7 +225,7 @@ class ProductJdbcRepositoryTest {
     @Order(4)
     @DisplayName("update함수는 정상적인 데이터가 입력되면 예외를 발생시키지 않는다.")
     void update함수는_정상적인_데이터가_입력되면_예외를_발생시키지_않는다() {
-        Product updatedProduct = new Product(1L,"testName2", inputProduct.category(),
+        Product updatedProduct = Product.of(1L,"testName2", inputProduct.category(),
                                              inputProduct.price(), inputProduct.description(),
                                              null,null,false);
 
