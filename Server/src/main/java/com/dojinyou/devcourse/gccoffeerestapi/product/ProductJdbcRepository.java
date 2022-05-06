@@ -1,4 +1,4 @@
-package com.dojinyou.devcourse.gccoffeerestapi.product.repository;
+package com.dojinyou.devcourse.gccoffeerestapi.product;
 
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Category;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Product;
@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

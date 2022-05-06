@@ -1,4 +1,4 @@
-package com.dojinyou.devcourse.gccoffeerestapi.product.repository;
+package com.dojinyou.devcourse.gccoffeerestapi.product;
 
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Category;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Product;
