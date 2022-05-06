@@ -60,35 +60,35 @@ public final class Product {
     }
 
 
-    public long id() {
+    public long getId() {
         return id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public Category category() {
+    public Category getCategory() {
         return category;
     }
 
-    public long price() {
+    public long getPrice() {
         return price;
     }
 
-    public String description() {
+    public String getDescription() {
         return description;
     }
 
-    public LocalDateTime createdAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime updatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public boolean isDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 

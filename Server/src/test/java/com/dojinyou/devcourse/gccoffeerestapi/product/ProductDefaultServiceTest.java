@@ -150,7 +150,7 @@ class ProductDefaultServiceTest {
     @Test
     @DisplayName("findByName함수는 입력된 id값에 해당하는 데이터가 있으면 데이터를 리턴한다")
     void findByName함수는_입력된_id값에_해당하는_데이터가_있으면_데이터를_리턴한다() {
-        String existName = insertedProduct.name();
+        String existName = insertedProduct.getName();
         when(productRepository.findByName(existName)).thenReturn(Optional.of(insertedProduct));
 
 
@@ -203,7 +203,7 @@ class ProductDefaultServiceTest {
     @Test
     @DisplayName("findAllByCategory함수는 입력된 Category에 해당하는 데이터가 있으면 데이터를 리턴한다.")
     void findAllByCategory함수는_입력된_Category에_해당하는_데이터가_있으면_데이터를_리턴한다() {
-        Category insertedCategory = insertedProduct.category();
+        Category insertedCategory = insertedProduct.getCategory();
         when(productRepository.findAllByCategory(any())).thenReturn(Arrays.asList(new Product[]{insertedProduct}));
 
         List<Product> allProductByCategory = productService.findAllByCategory(insertedCategory);
@@ -214,7 +214,7 @@ class ProductDefaultServiceTest {
         Product foundProduct = allProductByCategory.get(0);
 
         assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.category()).isEqualTo(insertedCategory);
+        assertThat(foundProduct.getCategory()).isEqualTo(insertedCategory);
     }
 
     @ParameterizedTest
@@ -230,7 +230,7 @@ class ProductDefaultServiceTest {
     @Test
     @DisplayName("update함수는 정상적인 데이터가 입력되면 repository의 update 함수를 호출한다.")
     void update함수는_repository의_update_함수를_호출한다() {
-        when(productRepository.findById(insertedProduct.id())).thenReturn(Optional.of(insertedProduct));
+        when(productRepository.findById(insertedProduct.getId())).thenReturn(Optional.of(insertedProduct));
 
         productService.update(insertedProduct);
 

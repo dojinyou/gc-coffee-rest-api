@@ -48,7 +48,7 @@ public class ProductJdbcRepository implements ProductRepository {
                 throw new RuntimeException("Not Insert Product");
             }
         } catch (DuplicateKeyException e) {
-            throw new IllegalArgumentException(product.name()+"이라는 상품 이름은 이미 사용 중입니다.");
+            throw new IllegalArgumentException(product.getName()+"이라는 상품 이름은 이미 사용 중입니다.");
         }
     }
 
@@ -89,7 +89,7 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public List<Product> findAllByCategory(Category category) {
-        return findAll().stream().filter(product -> product.category() == category).collect(Collectors.toList());
+        return findAll().stream().filter(product -> product.getCategory() == category).collect(Collectors.toList());
     }
 
     @Override
@@ -102,13 +102,13 @@ public class ProductJdbcRepository implements ProductRepository {
                                                   getParameterSource(product));
 
             if (updatedRows == 0) {
-                throw new IllegalArgumentException("id값이 "+product.id()+" 인 상품을 찾을 수 없습니다.");
+                throw new IllegalArgumentException("id값이 "+product.getId()+" 인 상품을 찾을 수 없습니다.");
             }
             if (updatedRows != 1) {
                 throw new RuntimeException("update가 정상적으로 처리되지 않았습니다.");
             }
         } catch (DuplicateKeyException e) {
-            throw new IllegalArgumentException(product.name()+"이라는 상품 이름은 이미 사용 중입니다.");
+            throw new IllegalArgumentException(product.getName()+"이라는 상품 이름은 이미 사용 중입니다.");
         }
     }
 
@@ -134,13 +134,13 @@ public class ProductJdbcRepository implements ProductRepository {
         if (product == null) {
             throw new IllegalArgumentException("잘못된 입력입니다.");
         }
-        return new MapSqlParameterSource().addValue("id", product.id())
-                                          .addValue("name", product.name())
-                                          .addValue("category", product.category().toString())
-                                          .addValue("price", product.price())
-                                          .addValue("description", product.description())
-                                          .addValue("createdAt", product.createdAt())
-                                          .addValue("updatedAt", product.updatedAt())
-                                          .addValue("isDeleted", product.isDeleted());
+        return new MapSqlParameterSource().addValue("id", product.getId())
+                                          .addValue("name", product.getName())
+                                          .addValue("category", product.getCategory().toString())
+                                          .addValue("price", product.getPrice())
+                                          .addValue("description", product.getDescription())
+                                          .addValue("createdAt", product.getCreatedAt())
+                                          .addValue("updatedAt", product.getUpdatedAt())
+                                          .addValue("isDeleted", product.getIsDeleted());
     }
 }

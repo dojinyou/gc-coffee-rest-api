@@ -1,6 +1,5 @@
 package com.dojinyou.devcourse.gccoffeerestapi.product;
 
-import com.dojinyou.devcourse.gccoffeerestapi.product.ProductJdbcRepository;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Category;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Product;
 import com.wix.mysql.EmbeddedMysql;
@@ -131,7 +130,7 @@ class ProductJdbcRepositoryTest {
         Product foundProduct = foundOptionalProduct.get();
 
         assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.id()).isEqualTo(inputId);
+        assertThat(foundProduct.getId()).isEqualTo(inputId);
     }
 
     @ParameterizedTest
@@ -150,7 +149,7 @@ class ProductJdbcRepositoryTest {
     @Order(3)
     @DisplayName("findByName함수는 입력된 name값에 해당하는 데이터가 있으면 데이터를 리턴한다.")
     void findByName함수는_입력된_name값에_해당하는_데이터가_있으면_데이터를_리턴한다() {
-        String inputName = inputProduct.name();
+        String inputName = inputProduct.getName();
 
         Optional<Product> foundOptionalProduct = productJdbcRepository.findByName(inputName);
 
@@ -160,7 +159,7 @@ class ProductJdbcRepositoryTest {
         Product foundProduct = foundOptionalProduct.get();
 
         assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.name()).isEqualTo(inputName);
+        assertThat(foundProduct.getName()).isEqualTo(inputName);
     }
 
     @ParameterizedTest
@@ -178,7 +177,7 @@ class ProductJdbcRepositoryTest {
     @Order(3)
     @DisplayName("findAllByCategory함수는 입력된 Category에 해당하는 데이터가 있으면 데이터를 리턴한다.")
     void findAllByCategory함수는_입력된_Category에_해당하는_데이터가_있으면_데이터를_리턴한다() {
-        Category inputCategory = inputProduct.category();
+        Category inputCategory = inputProduct.getCategory();
 
         List<Product> allProductByCategory = productJdbcRepository.findAllByCategory(inputCategory);
 
@@ -188,7 +187,7 @@ class ProductJdbcRepositoryTest {
         Product foundProduct = allProductByCategory.get(0);
 
         assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.category()).isEqualTo(inputCategory);
+        assertThat(foundProduct.getCategory()).isEqualTo(inputCategory);
     }
 
     @Test
@@ -211,9 +210,9 @@ class ProductJdbcRepositoryTest {
     void update함수는_update하려는_이름이_중복일_경우_예외를_발생시킨다() {
         Product insertProduct = Product.of("notDuplicatedName", Category.TEA, 100L, null);
         productJdbcRepository.insert(insertProduct);
-        Product updateProduct = Product.of(2L, "testName", insertProduct.category(),
-                                            insertProduct.price(), insertProduct.description(),
-                                            null, null,false);
+        Product updateProduct = Product.of(2L, "testName", insertProduct.getCategory(),
+                                           insertProduct.getPrice(), insertProduct.getDescription(),
+                                           null, null, false);
 
         Throwable throwable = catchThrowable(() -> productJdbcRepository.update(updateProduct));
 
@@ -225,9 +224,9 @@ class ProductJdbcRepositoryTest {
     @Order(4)
     @DisplayName("update함수는 정상적인 데이터가 입력되면 예외를 발생시키지 않는다.")
     void update함수는_정상적인_데이터가_입력되면_예외를_발생시키지_않는다() {
-        Product updatedProduct = Product.of(1L,"testName2", inputProduct.category(),
-                                             inputProduct.price(), inputProduct.description(),
-                                             null,null,false);
+        Product updatedProduct = Product.of(1L, "testName2", inputProduct.getCategory(),
+                                            inputProduct.getPrice(), inputProduct.getDescription(),
+                                            null, null, false);
 
         Throwable throwable = catchThrowable(() -> productJdbcRepository.update(updatedProduct));
 

@@ -18,7 +18,7 @@ public class ProductDefaultService implements ProductService {
 
     @Override
     public void insert(Product product) {
-        if (product.id() != 0) {
+        if (product.getId() != 0) {
             throw new IllegalArgumentException("생성되는 상품은 Id가 0이어야 합니다.");
         }
         productRepository.insert(product);
@@ -59,7 +59,7 @@ public class ProductDefaultService implements ProductService {
             throw new IllegalArgumentException("입력된 상품이 없습니다.");
         }
 
-        if (product.id() == 0) {
+        if (product.getId() == 0) {
             throw new IllegalArgumentException("id값이 0인 상품은 update 할 수 없습니다.");
         }
 
