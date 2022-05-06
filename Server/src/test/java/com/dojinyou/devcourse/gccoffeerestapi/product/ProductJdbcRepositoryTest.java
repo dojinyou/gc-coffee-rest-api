@@ -74,8 +74,7 @@ class ProductJdbcRepositoryTest {
         Throwable throwable = catchThrowable(() -> productJdbcRepository.insert(inputProduct));
 
         assertThat(throwable).isNotNull()
-                             .isInstanceOf(IllegalArgumentException.class)
-                             .hasMessage("잘못된 입력입니다.");
+                             .isInstanceOf(IllegalArgumentException.class);
     }
     @Test
     @Order(3)
