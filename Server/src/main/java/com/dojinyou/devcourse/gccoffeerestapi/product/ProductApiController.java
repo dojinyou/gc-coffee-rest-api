@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController()
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/products")
 public class ProductApiController {
     private final ProductService productService;
 

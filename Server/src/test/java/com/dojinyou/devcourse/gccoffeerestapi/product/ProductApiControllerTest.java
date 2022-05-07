@@ -63,7 +63,7 @@ class ProductApiControllerTest {
                                             .toList());
 
 
-        var response = mvc.perform(get("/api/v1/product"));
+        var response = mvc.perform(get("/api/v1/products"));
 
         response.andExpect(status().isOk())
                 .andExpect(content().json(returnJson));
@@ -75,7 +75,7 @@ class ProductApiControllerTest {
     public void 전체_상품_조회_시_조회될_데이터가_없을_경우_빈_리스트를_응답한다() throws Exception {
         when(productService.findAll()).thenReturn(Arrays.asList());
 
-        var response = mvc.perform(get("/api/v1/product"));
+        var response = mvc.perform(get("/api/v1/products"));
 
         response.andExpect(status().isOk())
                 .andExpect(content().json("[]"));
@@ -92,7 +92,7 @@ class ProductApiControllerTest {
                                                .map(ProductResponse::from)
                                                .toList());
 
-        var response = mvc.perform(get("/api/v1/product?category=TEA"));
+        var response = mvc.perform(get("/api/v1/products?category=TEA"));
 
         response.andExpect(status().isOk())
                 .andExpect(content().json(jsonObject));
@@ -104,7 +104,7 @@ class ProductApiControllerTest {
     public void 카테고리를_이용한_상품_조회_시_조회될_데이터가_없는_경우_빈_리스트를_응답한다() throws Exception {
         when(productService.findAllByCategory(Category.COFFEE)).thenReturn(Arrays.asList());
 
-        var response = mvc.perform(get("/api/v1/product?category=COFFEE"));
+        var response = mvc.perform(get("/api/v1/products?category=COFFEE"));
 
         response.andExpect(status().isOk())
                 .andExpect(content().json("[]"));
@@ -114,7 +114,7 @@ class ProductApiControllerTest {
     @Test
     @DisplayName("카테고리를 이용한 상품 조회 시 잘못된 카테고리를 입력할 경우 400 Bad Request로 응답한다.")
     public void 카테고리를_이용한_상품_조회_시_잘못된_카테고리를_입력할_경우_400_Bad_Reqeust로_응답한다() throws Exception {
-        var response = mvc.perform(get("/api/v1/product?category=NotCateogry"));
+        var response = mvc.perform(get("/api/v1/products?category=NotCateogry"));
 
         response.andExpect(status().isBadRequest());
     }
@@ -129,7 +129,7 @@ class ProductApiControllerTest {
         when(productService.findByName(inputName)).thenReturn(returnObject);
         String jsonObject = toJson(ProductResponse.from(returnObject));
 
-        var response = mvc.perform(get("/api/v1/product?name=" + inputName));
+        var response = mvc.perform(get("/api/v1/products?name=" + inputName));
 
         response.andExpect(status().isOk())
                 .andExpect(content().json(jsonObject));
@@ -142,7 +142,7 @@ class ProductApiControllerTest {
         String inputName = "NotFoundName";
         when(productService.findByName(inputName)).thenThrow(NotFoundException.class);
 
-        var response = mvc.perform(get("/api/v1/product?name=" + inputName));
+        var response = mvc.perform(get("/api/v1/products?name=" + inputName));
 
         response.andExpect(status().isNotFound());
     }
@@ -156,7 +156,7 @@ class ProductApiControllerTest {
         requestBody.put("price", 3000);
         requestBody.put("description", null);
 
-        var response = mvc.perform(post("/api/v1/product")
+        var response = mvc.perform(post("/api/v1/products")
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(objectMapper.writeValueAsString(requestBody)));
 
@@ -171,7 +171,7 @@ class ProductApiControllerTest {
         requestBody.put("category", "TEA");
         requestBody.put("price", 3000);
 
-        var response = mvc.perform(post("/api/v1/product")
+        var response = mvc.perform(post("/api/v1/products")
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(objectMapper.writeValueAsString(requestBody)));
 
@@ -188,7 +188,7 @@ class ProductApiControllerTest {
         doThrow(IllegalArgumentException.class).when(productService).insert(any());
 
 
-        var response = mvc.perform(post("/api/v1/product")
+        var response = mvc.perform(post("/api/v1/products")
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(objectMapper.writeValueAsString(requestBody)));
 
@@ -203,7 +203,7 @@ class ProductApiControllerTest {
         requestBody.put("category", "TEA");
         requestBody.put("price", -3000);
 
-        var response = mvc.perform(post("/api/v1/product")
+        var response = mvc.perform(post("/api/v1/products")
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(objectMapper.writeValueAsString(requestBody)));
 
@@ -214,7 +214,7 @@ class ProductApiControllerTest {
     @DisplayName("상품 추가 시 요청 내용이 없는 경우 400 Bad Request로 응답한다.")
     public void 상품_추가_시_요청_내용이_없는_경우_400_Bad_Request로_응답한다() throws Exception {
 
-        var response = mvc.perform(post("/api/v1/product")
+        var response = mvc.perform(post("/api/v1/products")
                                            .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isBadRequest());
@@ -223,7 +223,7 @@ class ProductApiControllerTest {
     @Test
     @DisplayName("상품 전체 삭제 시 전체 삭제 후 204 No Content로 응답한다.")
     public void 상품_전체_삭제_시_전체_삭제_후_204_No_Content로_응답한다() throws Exception {
-        var response = mvc.perform(delete("/api/v1/product"));
+        var response = mvc.perform(delete("/api/v1/products"));
 
         response.andExpect(status().isNoContent());
     }
@@ -234,7 +234,7 @@ class ProductApiControllerTest {
         long inputId = 1L;
         when(productService.findById(inputId)).thenReturn(insertedProduct1);
 
-        var response = mvc.perform(get("/api/v1/product/" + inputId));
+        var response = mvc.perform(get("/api/v1/products/" + inputId));
 
         response.andExpect(status().isOk())
                 .andExpect(content().json(toJson(ProductResponse.from(insertedProduct1))));
@@ -245,7 +245,7 @@ class ProductApiControllerTest {
     public void id를_이용한_상품_조회_시_비정상적인_id값을_입력할_경우_400_Bad_Request로_응답한다() throws Exception {
         String inputId = "invalidId";
 
-        var response = mvc.perform(get("/api/v1/product/" + inputId));
+        var response = mvc.perform(get("/api/v1/products/" + inputId));
 
         response.andExpect(status().isBadRequest());
     }
@@ -256,7 +256,7 @@ class ProductApiControllerTest {
         long inputId = 10L;
         when(productService.findById(inputId)).thenThrow(NotFoundException.class);
 
-        var response = mvc.perform(get("/api/v1/product/" + inputId));
+        var response = mvc.perform(get("/api/v1/products/" + inputId));
 
         response.andExpect(status().isNotFound());
     }
@@ -269,7 +269,7 @@ class ProductApiControllerTest {
                                                             insertedProduct1.getPrice(),
                                                             insertedProduct1.getDescription());
 
-        var response = mvc.perform(put("/api/v1/product/" + insertedProduct1.getId())
+        var response = mvc.perform(put("/api/v1/products/" + insertedProduct1.getId())
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(objectMapper.writeValueAsString(productUpdateRequest)));
 
@@ -286,7 +286,7 @@ class ProductApiControllerTest {
                                                             insertedProduct1.getDescription());
         doThrow(IllegalArgumentException.class).when(productService).update(any());
 
-        var response = mvc.perform(put("/api/v1/product/" + insertedProduct1.getId())
+        var response = mvc.perform(put("/api/v1/products/" + insertedProduct1.getId())
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(objectMapper.writeValueAsString(productUpdateRequest)));
 
@@ -297,7 +297,7 @@ class ProductApiControllerTest {
     @DisplayName("id를 이용한 상품 수정 시 입력이 없는 경우 400 Bad Request로 응답한다.")
     public void id를_이용한_상품_수정_시_입력이_없는_경우_400_Bad_Request로_응답한다() throws Exception {
 
-        var response = mvc.perform(put("/api/v1/product/" + insertedProduct1.getId())
+        var response = mvc.perform(put("/api/v1/products/" + insertedProduct1.getId())
                                            .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isBadRequest());
@@ -311,7 +311,7 @@ class ProductApiControllerTest {
         requestBody.put("category", "notCategory");
         requestBody.put("price", 2000);
 
-        var response = mvc.perform(put("/api/v1/product/" + insertedProduct1.getId())
+        var response = mvc.perform(put("/api/v1/products/" + insertedProduct1.getId())
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(toJson(requestBody)));
 
@@ -327,7 +327,7 @@ class ProductApiControllerTest {
                                                             insertedProduct1.getDescription());
         doThrow(NotFoundException.class).when(productService).update(any());
 
-        var response = mvc.perform(put("/api/v1/product/10")
+        var response = mvc.perform(put("/api/v1/products/10")
                                            .contentType(MediaType.APPLICATION_JSON)
                                            .content(objectMapper.writeValueAsString(productUpdateRequest)));
 
@@ -338,7 +338,7 @@ class ProductApiControllerTest {
     @DisplayName("id를 이용한 상품 삭제 시 정상 삭제될 경우 204 No Content로 응답한다.")
     public void id를_이용한_상품_삭제_시_정상_삭제될_경우_204_No_Content로_응답한다() throws Exception {
 
-        var response = mvc.perform(delete("/api/v1/product/" + insertedProduct1.getId()));
+        var response = mvc.perform(delete("/api/v1/products/" + insertedProduct1.getId()));
 
         response.andExpect(status().isNoContent());
     }
@@ -348,7 +348,7 @@ class ProductApiControllerTest {
     public void id를_이용한_상품_삭제_시_비정상적인_id값을_입력할_경우_400_Bad_Request로_응답한다() throws Exception {
         String inputId = "invalidId";
 
-        var response = mvc.perform(delete("/api/v1/product/" + inputId));
+        var response = mvc.perform(delete("/api/v1/products/" + inputId));
 
         response.andExpect(status().isBadRequest());
     }
@@ -359,7 +359,7 @@ class ProductApiControllerTest {
         long inputId = 10L;
         doThrow(NotFoundException.class).when(productService).deleteById(inputId);
 
-        var response = mvc.perform(delete("/api/v1/product/" + inputId));
+        var response = mvc.perform(delete("/api/v1/products/" + inputId));
 
         response.andExpect(status().isNotFound());
     }
