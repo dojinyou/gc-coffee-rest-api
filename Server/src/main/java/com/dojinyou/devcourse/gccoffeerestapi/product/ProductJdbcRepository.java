@@ -1,5 +1,6 @@
 package com.dojinyou.devcourse.gccoffeerestapi.product;
 
+import com.dojinyou.devcourse.gccoffeerestapi.common.exception.NotFoundException;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Category;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Product;
 import org.springframework.dao.DuplicateKeyException;
@@ -63,6 +64,9 @@ public class ProductJdbcRepository implements ProductRepository {
                                                         new MapSqlParameterSource().addValue("id", id),
                                                         productRowMapper);
 
+        if (foundProduct.size() == 0) {
+            throw new NotFoundException("id 값이 " + id + "인 상품을 찾을 수 없습니다.");
+        }
         if (2 < foundProduct.size()) {
             throw new RuntimeException("id 값이 " + id + "인 상품이 여러 개 존재합니다.");
         }
@@ -78,6 +82,9 @@ public class ProductJdbcRepository implements ProductRepository {
                                                         new MapSqlParameterSource().addValue("name", name),
                                                         productRowMapper);
 
+        if (0 == foundProduct.size()) {
+            throw new NotFoundException("상품의 이름이 " + name + "인 상품을 찾을 수 없습니다.");
+        }
         if (2 < foundProduct.size()) {
             throw new RuntimeException("상품의 이름이 " + name + "인 상품이 여러 개 존재합니다.");
         }
@@ -102,7 +109,7 @@ public class ProductJdbcRepository implements ProductRepository {
                                                   getParameterSource(product));
 
             if (updatedRows == 0) {
-                throw new IllegalArgumentException("id값이 "+product.getId()+" 인 상품을 찾을 수 없습니다.");
+                throw new NotFoundException("id값이 "+product.getId()+" 인 상품을 찾을 수 없습니다.");
             }
             if (updatedRows != 1) {
                 throw new RuntimeException("update가 정상적으로 처리되지 않았습니다.");
@@ -118,7 +125,7 @@ public class ProductJdbcRepository implements ProductRepository {
                                 new MapSqlParameterSource().addValue("id", id));
 
             if (updatedRows == 0) {
-                throw new IllegalArgumentException("id값이 "+id+" 인 상품을 찾을 수 없습니다.");
+                throw new NotFoundException("id값이 "+id+" 인 상품을 찾을 수 없습니다.");
             }
             if (updatedRows != 1) {
                 throw new RuntimeException("update가 정상적으로 처리되지 않았습니다.");
