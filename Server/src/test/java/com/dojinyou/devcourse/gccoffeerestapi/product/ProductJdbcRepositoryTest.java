@@ -1,5 +1,6 @@
 package com.dojinyou.devcourse.gccoffeerestapi.product;
 
+import com.dojinyou.devcourse.gccoffeerestapi.common.exception.NotFoundException;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Category;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Product;
 import com.wix.mysql.EmbeddedMysql;
@@ -111,12 +112,12 @@ class ProductJdbcRepositoryTest {
 
     @ParameterizedTest
     @ValueSource(longs = {-1, 0, Long.MAX_VALUE})
-    @DisplayName("findById함수는 입력된 id값에 해당하는 데이터가 없으면 Optional.Empty를 리턴한다")
-    void findById함수는_입력된_id값에_해당하는_데이터가_없으면_Optional_Empty를_리턴한다(long inputId) {
-        Optional<Product> foundOptionalProduct = productJdbcRepository.findById(inputId);
+    @DisplayName("findById함수는 입력된 id값에 해당하는 데이터가 없으면 NotFoundException을 발생시킨다")
+    void findById함수는_입력된_id값에_해당하는_데이터가_없으면_NotFoundException을_발생시킨다(long inputId) {
+        Throwable throwable = catchThrowable(() -> productJdbcRepository.findById(inputId));
 
-        assertThat(foundOptionalProduct).isNotNull();
-        assertThat(foundOptionalProduct.isEmpty()).isTrue();
+        assertThat(throwable).isNotNull()
+                             .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -138,13 +139,13 @@ class ProductJdbcRepositoryTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"failName", "notFoundName"})
-    @DisplayName("findByName함수는 입력된 name값에 해당하는 데이터가 없으면 Optional.Empty를 리턴한다.")
-    void findByName함수는_입력된_name값에_해당하는_데이터가_없으면_Optional_Empty를_리턴한다(String inputName) {
+    @DisplayName("findByName함수는 입력된 name값에 해당하는 데이터가 없으면 NotFoundException을 발생시킨다.")
+    void findByName함수는_입력된_name값에_해당하는_데이터가_없으면_NotFoundException을_발생시킨다(String inputName) {
 
-        Optional<Product> foundOptionalProduct = productJdbcRepository.findByName(inputName);
+        Throwable throwable = catchThrowable(() -> productJdbcRepository.findByName(inputName));
 
-        assertThat(foundOptionalProduct).isNotNull();
-        assertThat(foundOptionalProduct.isEmpty()).isTrue();
+        assertThat(throwable).isNotNull()
+                             .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -203,7 +204,7 @@ class ProductJdbcRepositoryTest {
         Throwable throwable = catchThrowable(() -> productJdbcRepository.update(notFoundProduct));
 
         assertThat(throwable).isNotNull()
-                             .isInstanceOf(IllegalArgumentException.class);
+                             .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -242,7 +243,7 @@ class ProductJdbcRepositoryTest {
         Throwable throwable = catchThrowable(() -> productJdbcRepository.deleteById(inputId));
 
         assertThat(throwable).isNotNull()
-                             .isInstanceOf(IllegalArgumentException.class);
+                             .isInstanceOf(NotFoundException.class);
     }
 
     @Test
