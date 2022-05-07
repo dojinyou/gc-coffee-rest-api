@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
@@ -24,8 +25,8 @@ import static com.wix.mysql.config.MysqldConfig.aMysqldConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 
-
-@SpringBootTest
+@EnableAutoConfiguration
+@SpringBootTest(classes = ProductJdbcRepository.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("ProductJdbcRepository 테스트")
@@ -75,6 +76,7 @@ class ProductJdbcRepositoryTest {
         assertThat(throwable).isNotNull()
                              .isInstanceOf(IllegalArgumentException.class);
     }
+
     @Test
     @Order(3)
     @DisplayName("insert함수는 입력된 상품의 이름이 이미 있으면 예외를 발생시킨다")
@@ -194,9 +196,9 @@ class ProductJdbcRepositoryTest {
     @DisplayName("update함수는 입력된 상품의 id에 해당하는 제품이 없을 경우 예외를 발생시킨다.")
     void update함수는_입력된_상품의_id에_해당하는_제s품이_없을_경우_예외를_발생시킨다() {
         Product notFoundProduct = Product.of(0L, "notDuplicatedName",
-                                              Category.COFFEE, 100L, null,
-                                              LocalDateTime.now(), LocalDateTime.now(),
-                                              false);
+                                             Category.COFFEE, 100L, null,
+                                             LocalDateTime.now(), LocalDateTime.now(),
+                                             false);
 
         Throwable throwable = catchThrowable(() -> productJdbcRepository.update(notFoundProduct));
 
