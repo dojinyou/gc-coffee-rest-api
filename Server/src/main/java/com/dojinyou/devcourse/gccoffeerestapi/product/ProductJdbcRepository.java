@@ -59,7 +59,7 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public Optional<Product> findById(long id) {
-        List<Product> foundProduct = jdbcTemplate.query("SELECT * FROM products WHERE id = :id",
+        List<Product> foundProduct = jdbcTemplate.query("SELECT * FROM products WHERE id = :id AND is_deleted = false",
                                                         new MapSqlParameterSource().addValue("id", id),
                                                         productRowMapper);
 
@@ -74,7 +74,7 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public Optional<Product> findByName(String name) {
-        List<Product> foundProduct = jdbcTemplate.query("SELECT * FROM products WHERE name = :name",
+        List<Product> foundProduct = jdbcTemplate.query("SELECT * FROM products WHERE name = :name AND is_deleted = false",
                                                         new MapSqlParameterSource().addValue("name", name),
                                                         productRowMapper);
 
@@ -98,7 +98,7 @@ public class ProductJdbcRepository implements ProductRepository {
             int updatedRows = jdbcTemplate.update("""
                                         UPDATE products
                                         SET name = :name, category = :category, price = :price, description = :description  
-                                        WHERE id = :id""",
+                                        WHERE id = :id AND is_deleted = false""",
                                                   getParameterSource(product));
 
             if (updatedRows == 0) {
@@ -114,7 +114,7 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public void deleteById(long id) {
-            int updatedRows = jdbcTemplate.update("DELETE FROM products WHERE id = :id",
+            int updatedRows = jdbcTemplate.update("UPDATE products SET is_deleted = true WHERE id = :id",
                                 new MapSqlParameterSource().addValue("id", id));
 
             if (updatedRows == 0) {
@@ -127,7 +127,7 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public void deleteAll() {
-        jdbcTemplate.update("DELETE FROM products", new MapSqlParameterSource());
+        jdbcTemplate.update("UPDATE products SET is_deleted = true", new MapSqlParameterSource());
     }
 
     private SqlParameterSource getParameterSource(Product product) {
