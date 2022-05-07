@@ -5,13 +5,14 @@ import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Category;
 import com.dojinyou.devcourse.gccoffeerestapi.product.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,14 +24,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.Mockito.*;
 
-@WebMvcTest(ProductService.class)
 @DisplayName("ProductJdbcRepository 테스트")
+@ExtendWith(MockitoExtension.class)
 class ProductDefaultServiceTest {
 
-    @MockBean
+    @Mock
     private ProductRepository productRepository;
 
-    @Autowired
+    @InjectMocks
     private ProductDefaultService productService;
 
     private final Product inputProduct = Product.of("inputName", Category.COFFEE,
@@ -86,7 +87,7 @@ class ProductDefaultServiceTest {
         Throwable throwable = catchThrowable(() -> productService.findById(inputId));
 
         assertThat(throwable).isNotNull()
-                             .isInstanceOf(IllegalArgumentException.class);
+                             .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -110,7 +111,7 @@ class ProductDefaultServiceTest {
         when(productRepository.findById(notExistId)).thenReturn(Optional.empty());
 
 
-       Throwable throwable = catchThrowable(() -> productService.findById(notExistId));
+        Throwable throwable = catchThrowable(() -> productService.findById(notExistId));
 
         assertThat(throwable).isNotNull()
                              .isInstanceOf(NotFoundException.class);
@@ -133,9 +134,9 @@ class ProductDefaultServiceTest {
         when(productRepository.findByName(existName)).thenReturn(Optional.of(insertedProduct));
 
 
-        verify(productRepository, atLeastOnce()).findByName(existName);
         Product foundProduct = productService.findByName(existName);
 
+        verify(productRepository, atLeastOnce()).findByName(existName);
         assertThat(foundProduct).isNotNull()
                                 .isEqualTo(insertedProduct);
     }
@@ -205,8 +206,6 @@ class ProductDefaultServiceTest {
     @Test
     @DisplayName("update함수는 정상적인 데이터가 입력되면 repository의 update 함수를 호출한다.")
     void update함수는_repository의_update_함수를_호출한다() {
-        when(productRepository.findById(insertedProduct.getId())).thenReturn(Optional.of(insertedProduct));
-
         productService.update(insertedProduct);
 
         verify(productRepository, atLeastOnce()).update(insertedProduct);
