@@ -55,7 +55,7 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public List<Product> findAll() {
-        return jdbcTemplate.query("SELECT * FROM products", productRowMapper);
+        return jdbcTemplate.query("SELECT * FROM products WHERE is_deleted = 0", productRowMapper);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public void deleteById(long id) {
-            int updatedRows = jdbcTemplate.update("UPDATE products SET is_deleted = 1 WHERE id = :id",
+            int updatedRows = jdbcTemplate.update("UPDATE products SET is_deleted = 1 WHERE id = :id AND is_deleted = 0",
                                 new MapSqlParameterSource().addValue("id", id));
 
             if (updatedRows == 0) {
