@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(OrderApiController.class)
+@DisplayName("OrderApiController 테스트")
 class OrderApiControllerTest {
     public static final String BASE_API_URL = "/api/v1/orders";
     @Autowired

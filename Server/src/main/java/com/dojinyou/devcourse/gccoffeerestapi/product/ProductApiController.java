@@ -23,14 +23,16 @@ public class ProductApiController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> find(@RequestParam("category") Optional<Category> category,
-                                  @RequestParam("name") Optional<String> name) {
+    public ResponseEntity find(@RequestParam("category") Optional<Category> category,
+                               @RequestParam("name") Optional<String> name) {
         if (name.isPresent()) {
             return new ResponseEntity<>(ProductResponse.from(productService.findByName(name.get())),
                                         HttpStatus.OK);
         }
+
         List<Product> products = category.map(productService::findAllByCategory)
                                          .orElseGet(productService::findAll);
+
         List<ProductResponse> responses = products.stream()
                                                   .map(ProductResponse::from)
                                                   .toList();

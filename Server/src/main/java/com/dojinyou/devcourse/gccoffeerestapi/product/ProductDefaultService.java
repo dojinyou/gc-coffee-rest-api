@@ -30,15 +30,6 @@ public class ProductDefaultService implements ProductService {
     }
 
     @Override
-    public Product findById(long id) {
-        if (id <= 0) {
-            throw new NotFoundException(id + "의 id를 가진 상품을 찾을 수 없습니다.");
-        }
-        return productRepository.findById(id).orElseThrow(NotFoundException::new);
-
-    }
-
-    @Override
     public Product findByName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("상품의 이름이 없습니다.");
@@ -53,6 +44,15 @@ public class ProductDefaultService implements ProductService {
             throw new IllegalArgumentException("입력된 Category가 없습니다.");
         }
         return productRepository.findAllByCategory(category);
+    }
+
+    @Override
+    public Product findById(long id) {
+        if (id <= 0) {
+            throw new NotFoundException(id + "의 id를 가진 상품을 찾을 수 없습니다.");
+        }
+        return productRepository.findById(id).orElseThrow(NotFoundException::new);
+
     }
 
     @Override

@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ProductApiController.class)
+@DisplayName("ProductApiController 테스트")
 class ProductApiControllerTest {
 
     public static final String BASE_API_URL = "/api/v1/products";

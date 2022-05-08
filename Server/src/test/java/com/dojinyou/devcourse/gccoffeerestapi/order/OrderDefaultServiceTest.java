@@ -19,8 +19,8 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 
-@DisplayName("OrderDefaultService 테스트")
 @ExtendWith(MockitoExtension.class)
+@DisplayName("OrderDefaultService 테스트")
 class OrderDefaultServiceTest {
 
     @Mock
