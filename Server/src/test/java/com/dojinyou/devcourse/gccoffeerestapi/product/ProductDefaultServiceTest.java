@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.Mockito.*;
 
-@DisplayName("ProductJdbcRepository 테스트")
+@DisplayName("ProductDefaultOrder 테스트")
 @ExtendWith(MockitoExtension.class)
 class ProductDefaultServiceTest {
 
