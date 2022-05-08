@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @RestControllerAdvice
 public class DefaultControllerAdvice {
 
@@ -17,5 +19,10 @@ public class DefaultControllerAdvice {
     @ExceptionHandler
     public ResponseEntity IllegalArgumentExceptionHandler(IllegalArgumentException e) {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity SQLIntegrityConstraintViolationExceptionHandler(SQLIntegrityConstraintViolationException e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
